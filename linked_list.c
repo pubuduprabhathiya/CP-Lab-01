@@ -49,8 +49,8 @@ int Member(int value, struct node *head){
     }
 }
 
-int Insert(int value, struct node **head){
-    struct node *curr = *head;
+int Insert(int value, struct node *head){
+    struct node *curr = head;
     struct node *prev = NULL;
     struct node *temp;
 
@@ -63,9 +63,10 @@ int Insert(int value, struct node **head){
         temp->value = value;
         temp->next = curr;
         if(prev == NULL)
-            *head = temp;
+            head = temp;
         else    
             prev->next = temp;
+
         return 1;
     }else{
         return 0;
@@ -79,7 +80,7 @@ struct node *get_linked_list(){
     int i=0;
     while (i<N)
     {
-        i+=Insert(get_random(),&head);
+        i+=Insert(get_random(),head);
     }
     return head;
 }

@@ -11,5 +11,5 @@ struct node {
 int get_random();
 int Delete(int value, struct node *head);
 int Member(int value, struct node *head);
-int Insert(int value, struct node **head);
+int Insert(int value, struct node *head);
 struct node *get_linked_list();
