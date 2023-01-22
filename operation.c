@@ -1,7 +1,7 @@
 #include "operation.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 static operation ops[M];
 
@@ -16,7 +16,7 @@ operation *get_operation_list(float m_member, float m_insert, float m_delete) {
        i++) {
     ops[i] = &Delete;
   }
-  // randomize(ops,N);
+  randomize(ops, N);
   return ops;
 }
 
@@ -32,4 +32,37 @@ void randomize(operation *arr, int n) {
     int j = rand() % (i + 1);
     swap(&arr[i], &arr[j]);
   }
+}
+
+double get_avg(clock_t *time_list) {
+  double sum = 0;
+  for (size_t i = 0; i < trials; i++) {
+    sum += (double)time_list[i] / (CLOCKS_PER_SEC);
+  }
+  return sum / trials;
+}
+double get_std(clock_t *time_list, double mean) {
+  double std = 0;
+  for (size_t i = 0; i < trials; i++) {
+    std += pow((double)time_list[i] / CLOCKS_PER_SEC - mean, 2);
+  }
+  return sqrt(std / trials);
+}
+
+operation *start_program() {
+  int case_num = 1;
+  int m_member, m_insert, m_delete;
+  printf("Enter case nuber: ");
+  int err = scanf("%d", &case_num);
+
+  if (case_num == 1)
+    m_member = M * 0.99, m_insert = M * 0.005, m_delete = M * 0.005;
+  else if (case_num == 2)
+    m_member = M * 0.90, m_insert = M * 0.05, m_delete = M * 0.05;
+  else if (case_num == 3)
+    m_member = M * 0.50, m_insert = M * 0.25, m_delete = M * 0.25;
+  printf("Start Program with m_member:- %i, m_insert:- %i, m_delete:- %i\n",
+         m_member, m_insert, m_delete);
+  operation *ops = get_operation_list(m_member, m_insert, m_delete);
+  return ops;
 }
