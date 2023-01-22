@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "operation.h"
 
 int main(){
@@ -19,7 +20,12 @@ int main(){
      m_member = M*0.50,m_insert = M*0.25, m_delete =M* 0.25;
     
     operation *ops= get_operation_list(m_member, m_insert, m_delete);
-    for (int i=0;i<M;i++){
-        ops[i](get_random(),head);
+    clock_t time=clock();
+    for (int t=0;t<10;t++){
+        for (int i=0;i<M;i++){
+            ops[i](get_random(),head);
+        }
     }
+    time=clock()-time;
+    printf("%e \n",(double)time / (CLOCKS_PER_SEC * 10));
 }
