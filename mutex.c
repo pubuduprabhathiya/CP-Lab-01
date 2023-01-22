@@ -8,6 +8,7 @@
 pthread_mutex_t lock;
 
 struct mutex_args {
+  struct node **head;
   clock_t *time_list;
   operation *ops;
   int thread_id;
@@ -17,48 +18,55 @@ struct mutex_args {
 
 void *run_program(void *ptr) {
   struct mutex_args *args = (struct mutex_args *)ptr;
-  struct node *head = get_linked_list();
+  printf("thread \n");
+  printf("id %i\n",args->thread_id);
+  printf("num %i\n",args->num_of_thread);
   clock_t time = clock();
+  for (int i = args->thread_id; i < M; i = i + args->num_of_thread) {
+      printf("head %i\n",i);
 
-  for (int i = args->thread_id; i < M; i + args->num_of_thread) {
     pthread_mutex_lock(&lock);
-    args->ops[i](get_random(), &head);
+    args->ops[i](get_random(), args->head);
     pthread_mutex_unlock(&lock);
   }
+        
 
   args->time_list[args->trial_num] = clock() - time;
-  free_all(head);
+
   return EXIT_SUCCESS;
 }
 
 int main() {
   int numThreads = 4;
   clock_t time_list[trials];
-  operation *ops = start_program();
-
-  
+  operation *ops =start_program();
 
   for (int t = 0; t < trials; t++) {
     pthread_t *threadHandles;
+    struct node *head =malloc(sizeof( struct node));
+    head = get_linked_list();
     pthread_mutex_init(&lock, NULL);
 
     threadHandles = malloc(numThreads * sizeof(pthread_t));
 
-    struct mutex_args mutex_args;
-    mutex_args.num_of_thread = numThreads;
-    mutex_args.ops = ops;
-    mutex_args.time_list = time_list;
-    mutex_args.trial_num = t;
     for (int th = 0; th < numThreads; th++) {
-      pthread_create(&threadHandles[th], NULL, run_program,
-                     (void *)&mutex_args);
+      struct mutex_args *mutex_args = malloc(sizeof(struct mutex_args));
+      mutex_args->head = &head;
+      mutex_args->num_of_thread = numThreads;
+      mutex_args->ops = ops;
+      mutex_args->time_list = time_list;
+      mutex_args->trial_num = t;
+      pthread_create(&threadHandles[th], NULL,(void *) run_program, (void *)mutex_args);
+      free(mutex_args);
     }
-
-    for (int thr = 0; thr < numThreads; ++thr) {
+    for (int thr = 0; thr < numThreads; thr++) {
+      printf("thread join %i\n", thr);
       pthread_join(threadHandles[thr], NULL);
     }
+
     free(threadHandles);
     pthread_mutex_destroy(&lock);
+    free_all(head);
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);

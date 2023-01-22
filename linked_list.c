@@ -5,6 +5,8 @@
 int get_random() { return rand() % MAX_VALUE; }
 
 int Delete(int value, struct node **head) {
+        // printf("Delete\n");
+
   struct node *curr = *head;
   struct node *prev = NULL;
   while (curr != NULL && curr->value < value) {
@@ -33,14 +35,19 @@ int Member(int value, struct node **head) {
     curr = curr->next;
   }
 
+
   if (curr == NULL || curr->value > value) {
+
     return 0;
   } else {
+
     return 1;
   }
 }
 
 int Insert(int value, struct node **head) {
+    // printf("Insert\n");
+
   struct node *curr = *head;
   struct node *prev = NULL;
   while (curr != NULL && curr->value < value) {
@@ -73,6 +80,7 @@ struct node *get_linked_list() {
 
   int i = 0;
   while (i < N) {
+    // printf("init ");
     i += Insert(get_random(), &head);
   }
   return head;
