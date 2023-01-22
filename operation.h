@@ -1,6 +1,6 @@
 #include "linked_list.h"
 #include <time.h>
-#define trials 1
+#define trials 97
 
 typedef int (*operation)(int value, struct node **head);
 void randomize(operation *arr, int n);

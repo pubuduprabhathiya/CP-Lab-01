@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-pthread_mutex_t lock;
+pthread_rwlock_t rw_lock;
 int numThreads;
 
 struct mutex_args {
@@ -19,9 +19,19 @@ void *run_program(void *ptr) {
   struct mutex_args *args = (struct mutex_args *)ptr;
 
   for (int i = args->thread_id; i < M; i = i + args->num_of_thread) {
-    pthread_mutex_lock(&lock);
-    args->ops[i](get_random(), args->head);
-    pthread_mutex_unlock(&lock);
+    if (args->ops[i] == Member){
+        pthread_rwlock_rdlock(&rw_lock);
+        args->ops[i](get_random(), args->head);
+        pthread_rwlock_unlock(&rw_lock);
+    }else if(args->ops[i] == Insert){
+        pthread_rwlock_wrlock(&rw_lock);
+        args->ops[i](get_random(), args->head);
+        pthread_rwlock_unlock(&rw_lock);
+    }else if(args->ops[i] == Delete){
+        pthread_rwlock_wrlock(&rw_lock);
+        args->ops[i](get_random(), args->head);
+        pthread_rwlock_unlock(&rw_lock);
+    }
   }
 
   return EXIT_SUCCESS;
@@ -36,7 +46,7 @@ int main() {
   for (int t = 0; t < trials; t++) {
     pthread_t *threadHandles;
     struct node *head = get_linked_list();
-    pthread_mutex_init(&lock, NULL);
+    pthread_rwlock_init(&rw_lock, NULL);
 
     threadHandles = malloc(numThreads * sizeof(pthread_t));
 
@@ -57,7 +67,7 @@ int main() {
     time_list[t] = clock() - time;
 
     free(threadHandles);
-    pthread_mutex_destroy(&lock);
+    pthread_rwlock_destroy(&rw_lock);
     free_all(head);
   }
   double avg = get_avg(time_list);
