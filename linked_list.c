@@ -1,5 +1,10 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "linked_list.h"
+
+int get_random(){
+    return rand()%MAX_VALUE;
+}
 
 int Delete(int value, struct node *head){
     struct node *curr=head;
@@ -33,7 +38,7 @@ int Delete(int value, struct node *head){
 int Member(int value, struct node *head){
     struct node *curr = head;
     
-    while (curr != NULL && curr->value< value){
+    while (curr != NULL && curr->value < value){
         curr = curr->next;
     }
 
@@ -65,4 +70,16 @@ int Insert(int value, struct node **head){
     }else{
         return 0;
     }
+}
+
+struct node *get_linked_list(){
+    struct node *head=(struct node *)malloc(sizeof(struct node));
+    head->value=get_random();
+
+    int i=0;
+    while (i<N)
+    {
+        i+=Insert(get_random(),&head);
+    }
+    return head;
 }
