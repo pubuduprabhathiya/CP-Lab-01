@@ -11,7 +11,7 @@ int main() {
 
   clock_t time_list[trials];
 
-  operation *ops =start_program(case_num);
+  operation *ops = start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
     struct node *head = get_linked_list();

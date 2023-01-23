@@ -1,12 +1,11 @@
 #include "operation.h"
 #include <math.h>
-#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "pthread_mutex_rwlock.h"
 
 pthread_mutex_t lock;
-int numThreads;
 
 struct mutex_args {
   struct node **head;
@@ -27,18 +26,11 @@ void *run_program(void *ptr) {
   return EXIT_SUCCESS;
 }
 
-int main() {
-
-  int case_num = 1;
-  printf("Enter case nuber: ");
-  int err = scanf("%d", &case_num);
+void run_mutex(int case_num,int numThreads) {
 
   clock_t time_list[trials];
-  
-  printf("Enter number of treads: ");
-  err = scanf("%d", &numThreads);
 
-  operation *ops =start_program(case_num);
+  operation *ops = start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
     pthread_t *threadHandles;
@@ -70,5 +62,4 @@ int main() {
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
   printf("Average:- %f, Std:- %f, threads: %d \n", avg, std, numThreads);
-  return 0;
 }

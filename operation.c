@@ -49,7 +49,7 @@ double get_std(clock_t *time_list, double mean) {
   return sqrt(std / trials);
 }
 
-operation *start_program( int case_num) {
+operation *start_program(int case_num) {
   int m_member, m_insert, m_delete;
 
   if (case_num == 1)
