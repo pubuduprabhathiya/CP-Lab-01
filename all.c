@@ -45,33 +45,33 @@ int main() {
       index += 1;
     }
     printf("Case Number %i\n", case_num);
-    printf("Serial\n");
+    printf("Serial\n      Thread 1 |Thread 2 |Thread 4 |Thread 8 |\nAvg:- ");
     for (int i = 0; i < 4; i++) {
       printf("%f ,", result_s[i]);
     }
-    printf("\n");
+    printf("\nStd:- ");
     for (int i = 0; i < 4; i++) {
       printf("%f ,", s_result_s[i]);
     }
-    printf("\n");
+   printf("\n\n");
 
-    printf("Mutex\n");
+    printf("Mutex\n      Thread 1 |Thread 2 |Thread 4 |Thread 8 |\nAvg:- ");
     for (int i = 0; i < 4; i++) {
-      printf("%f ,", result_m[i]);
+      printf("%f |", result_m[i]);
     }
-    printf("\n");
+    printf("\nStd:- ");
     for (int i = 0; i < 4; i++) {
-      printf("%f ,", s_result_m[i]);
+      printf("%f |", s_result_m[i]);
     }
-    printf("\n");
+    printf("\n\n");
 
-    printf("RWLock\n");
+    printf("RWLock\n      Thread 1 |Thread 2 |Thread 4 |Thread 8 |\nAvg:- ");
     for (int i = 0; i < 4; i++) {
-      printf("%f ,", result_r[i]);
+      printf("%f |", result_r[i]);
     }
-    printf("\n");
+    printf("\nStd:- ");
     for (int i = 0; i < 4; i++) {
-      printf("%f ,", s_result_r[i]);
+      printf("%f |", s_result_r[i]);
     }
 
     printf("\n\n\n");

@@ -5,25 +5,24 @@
 // static const char *create_ghaph_fun = "create_ghaph";
 
 // int create_graph(char **src, PyObject *knl) {
-//   *src = "sycl";
-//   PyObject *kernel_py = PyUnicode_FromString(file_name);
-//   if (kernel_py) {
-//     PyObject *module = PyImport_Import(kernel_py);
+//   PyObject *file_py = PyUnicode_FromString(file_name);
+//   if (file_py) {
+//     PyObject *module = PyImport_Import(file_py);
 //     if (module) {
 //       PyObject *funtion = PyObject_GetAttrString(module, create_ghaph_fun);
 //       if (funtion) {
-//         PyObject *kernelfun = PyObject_CallFunctionObjArgs(funtion, knl,
+//         PyObject *filefun = PyObject_CallFunctionObjArgs(funtion, knl,
 //         NULL);
 //         //  Py_ssize_t size;
-//         //   const char *src_ = PyUnicode_AsUTF8AndSize(kernelfun, &size);
+//         //   const char *src_ = PyUnicode_AsUTF8AndSize(filefun, &size);
 //         // *src = tcalloc(char, size + 1);
 //         // strncpy(*src, src_, size + 1);
-//         Py_DECREF(kernelfun);
+//         Py_DECREF(filefun);
 //         Py_DECREF(funtion);
 //       }
 //       Py_DECREF(module);
 //     }
-//     Py_DECREF(kernel_py);
+//     Py_DECREF(file_py);
 //   }
 //   return 0;
 // }
