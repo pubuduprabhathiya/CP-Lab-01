@@ -16,7 +16,7 @@ struct mutex_args {
 
 void *run_program(void *ptr) {
   struct mutex_args *args = (struct mutex_args *)ptr;
-  int num=args->num_of_thread;
+  int num = args->num_of_thread;
   for (int i = args->thread_id; i < M; i = i + num) {
     pthread_mutex_lock(&lock);
     args->ops[i](get_random(), args->head);
@@ -36,7 +36,6 @@ struct result *run_mutex(int case_num, int numThreads) {
     pthread_t *threadHandles;
     pthread_mutex_init(&lock, NULL);
     threadHandles = malloc(numThreads * sizeof(pthread_t));
-      
 
     clock_t time = clock();
 

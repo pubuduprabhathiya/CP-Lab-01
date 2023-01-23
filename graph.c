@@ -12,7 +12,8 @@
 //     if (module) {
 //       PyObject *funtion = PyObject_GetAttrString(module, create_ghaph_fun);
 //       if (funtion) {
-//         PyObject *kernelfun = PyObject_CallFunctionObjArgs(funtion, knl, NULL);
+//         PyObject *kernelfun = PyObject_CallFunctionObjArgs(funtion, knl,
+//         NULL);
 //         //  Py_ssize_t size;
 //         //   const char *src_ = PyUnicode_AsUTF8AndSize(kernelfun, &size);
 //         // *src = tcalloc(char, size + 1);
