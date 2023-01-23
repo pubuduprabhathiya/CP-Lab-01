@@ -1,11 +1,14 @@
+#include "all_programs.h"
 #include "operation.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-int main() {
+struct result *run_serial(int case_num) {
+
   clock_t time_list[trials];
-  operation *ops = start_program();
+
+  operation *ops = start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
     struct node *head = get_linked_list();
@@ -18,6 +21,10 @@ int main() {
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
-  printf("Average:- %f, Std:- %f \n", avg, std);
-  return 0;
+  // printf("Serial Average:- %f, Std:- %f \n", avg, std);
+
+  struct result *result = malloc(sizeof(struct result));
+  result->avg = avg;
+  result->std = std;
+  return result;
 }

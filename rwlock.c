@@ -1,3 +1,4 @@
+#include "all_programs.h"
 #include "operation.h"
 #include <math.h>
 #include <pthread.h>
@@ -6,7 +7,6 @@
 #include <time.h>
 
 pthread_rwlock_t rw_lock;
-int numThreads;
 
 struct rwlock_args {
   struct node **head;
@@ -15,33 +15,28 @@ struct rwlock_args {
   int num_of_thread;
 };
 
-void *run_program(void *ptr) {
+void *run_program_rwlock(void *ptr) {
   struct rwlock_args *args = (struct rwlock_args *)ptr;
 
   for (int i = args->thread_id; i < M; i = i + args->num_of_thread) {
-    if (args->ops[i] == Member){
-        pthread_rwlock_rdlock(&rw_lock);
-        args->ops[i](get_random(), args->head);
-        pthread_rwlock_unlock(&rw_lock);
-    }else if(args->ops[i] == Insert){
-        pthread_rwlock_wrlock(&rw_lock);
-        args->ops[i](get_random(), args->head);
-        pthread_rwlock_unlock(&rw_lock);
-    }else if(args->ops[i] == Delete){
-        pthread_rwlock_wrlock(&rw_lock);
-        args->ops[i](get_random(), args->head);
-        pthread_rwlock_unlock(&rw_lock);
+    if (args->ops[i] == Member) {
+      pthread_rwlock_rdlock(&rw_lock);
+      args->ops[i](get_random(), args->head);
+      pthread_rwlock_unlock(&rw_lock);
+    } else {
+      pthread_rwlock_wrlock(&rw_lock);
+      args->ops[i](get_random(), args->head);
+      pthread_rwlock_unlock(&rw_lock);
     }
   }
 
   return EXIT_SUCCESS;
 }
 
-int main() {
+struct result *run_rwlock(int case_num, int numThreads) {
   clock_t time_list[trials];
-  operation *ops =start_program();
-  printf("Enter number of treads: ");
-  int err = scanf("%d", &numThreads);
+
+  operation *ops = start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
     pthread_t *threadHandles;
@@ -58,7 +53,8 @@ int main() {
       rwlock_args->num_of_thread = numThreads;
       rwlock_args->ops = ops;
       rwlock_args->thread_id = th;
-      pthread_create(&threadHandles[th], NULL, run_program, (void *)rwlock_args);
+      pthread_create(&threadHandles[th], NULL, run_program_rwlock,
+                     (void *)rwlock_args);
     }
     for (int thr = 0; thr < numThreads; thr++) {
       pthread_join(threadHandles[thr], NULL);
@@ -72,6 +68,10 @@ int main() {
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
-  printf("Average:- %f, Std:- %f, threads: %d \n", avg, std, numThreads);
-  return 0;
+  // printf("RWLock Average:- %f, Std:- %f, threads: %d \n", avg, std,
+  // numThreads);
+  struct result *result = malloc(sizeof(struct result));
+  result->avg = avg;
+  result->std = std;
+  return result;
 }

@@ -1,8 +1,8 @@
 #include "linked_list.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-int get_random() { return rand() % MAX_VALUE; }
+unsigned int seed = 3;
+int get_random() { return rand_r(&seed) % MAX_VALUE; }
 
 int Delete(int value, struct node **head) {
   struct node *curr = *head;

@@ -16,7 +16,7 @@ operation *get_operation_list(float m_member, float m_insert, float m_delete) {
        i++) {
     ops[i] = &Delete;
   }
-  randomize(ops, N);
+  randomize(ops, M);
   return ops;
 }
 
@@ -28,8 +28,9 @@ void swap(operation *a, operation *b) {
 
 void randomize(operation *arr, int n) {
   srand(time(NULL));
+  unsigned int seed = 3;
   for (int i = n - 1; i > 0; i--) {
-    int j = rand() % (i + 1);
+    int j = rand_r(&seed) % (i + 1);
     swap(&arr[i], &arr[j]);
   }
 }
@@ -49,11 +50,8 @@ double get_std(clock_t *time_list, double mean) {
   return sqrt(std / trials);
 }
 
-operation *start_program() {
-  int case_num = 1;
+operation *start_program(int case_num) {
   int m_member, m_insert, m_delete;
-  printf("Enter case nuber: ");
-  int err = scanf("%d", &case_num);
 
   if (case_num == 1)
     m_member = M * 0.99, m_insert = M * 0.005, m_delete = M * 0.005;
@@ -61,8 +59,8 @@ operation *start_program() {
     m_member = M * 0.90, m_insert = M * 0.05, m_delete = M * 0.05;
   else if (case_num == 3)
     m_member = M * 0.50, m_insert = M * 0.25, m_delete = M * 0.25;
-  printf("Start Program with m_member:- %i, m_insert:- %i, m_delete:- %i\n",
-         m_member, m_insert, m_delete);
+  // printf("Start Program with m_member:- %i, m_insert:- %i, m_delete:- %i\n",
+  //   m_member, m_insert, m_delete);
   operation *ops = get_operation_list(m_member, m_insert, m_delete);
   return ops;
 }
