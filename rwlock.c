@@ -8,7 +8,7 @@
 pthread_rwlock_t rw_lock;
 int numThreads;
 
-struct mutex_args {
+struct rwlock_args {
   struct node **head;
   operation *ops;
   int thread_id;
@@ -16,7 +16,7 @@ struct mutex_args {
 };
 
 void *run_program(void *ptr) {
-  struct mutex_args *args = (struct mutex_args *)ptr;
+  struct rwlock_args *args = (struct rwlock_args *)ptr;
 
   for (int i = args->thread_id; i < M; i = i + args->num_of_thread) {
     if (args->ops[i] == Member){
@@ -53,12 +53,12 @@ int main() {
     clock_t time = clock();
 
     for (int th = 0; th < numThreads; th++) {
-      struct mutex_args *mutex_args = malloc(sizeof(struct mutex_args));
-      mutex_args->head = &head;
-      mutex_args->num_of_thread = numThreads;
-      mutex_args->ops = ops;
-      mutex_args->thread_id = th;
-      pthread_create(&threadHandles[th], NULL, run_program, (void *)mutex_args);
+      struct rwlock_args *rwlock_args = malloc(sizeof(struct rwlock_args));
+      rwlock_args->head = &head;
+      rwlock_args->num_of_thread = numThreads;
+      rwlock_args->ops = ops;
+      rwlock_args->thread_id = th;
+      pthread_create(&threadHandles[th], NULL, run_program, (void *)rwlock_args);
     }
     for (int thr = 0; thr < numThreads; thr++) {
       pthread_join(threadHandles[thr], NULL);
