@@ -58,8 +58,8 @@ operation *start_program(int case_num) {
     m_member = M * 0.90, m_insert = M * 0.05, m_delete = M * 0.05;
   else if (case_num == 3)
     m_member = M * 0.50, m_insert = M * 0.25, m_delete = M * 0.25;
-  printf("Start Program with m_member:- %i, m_insert:- %i, m_delete:- %i\n",
-         m_member, m_insert, m_delete);
+  // printf("Start Program with m_member:- %i, m_insert:- %i, m_delete:- %i\n",
+  //   m_member, m_insert, m_delete);
   operation *ops = get_operation_list(m_member, m_insert, m_delete);
   return ops;
 }

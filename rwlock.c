@@ -1,11 +1,10 @@
+#include "all_programs.h"
 #include "operation.h"
 #include <math.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "pthread_mutex_rwlock.h"
-
 
 pthread_rwlock_t rw_lock;
 
@@ -24,11 +23,7 @@ void *run_program_rwlock(void *ptr) {
       pthread_rwlock_rdlock(&rw_lock);
       args->ops[i](get_random(), args->head);
       pthread_rwlock_unlock(&rw_lock);
-    } else if (args->ops[i] == Insert) {
-      pthread_rwlock_wrlock(&rw_lock);
-      args->ops[i](get_random(), args->head);
-      pthread_rwlock_unlock(&rw_lock);
-    } else if (args->ops[i] == Delete) {
+    } else {
       pthread_rwlock_wrlock(&rw_lock);
       args->ops[i](get_random(), args->head);
       pthread_rwlock_unlock(&rw_lock);
@@ -38,7 +33,7 @@ void *run_program_rwlock(void *ptr) {
   return EXIT_SUCCESS;
 }
 
-void run_rwlock(int case_num,int numThreads) {
+struct result *run_rwlock(int case_num, int numThreads) {
   clock_t time_list[trials];
 
   operation *ops = start_program(case_num);
@@ -73,5 +68,10 @@ void run_rwlock(int case_num,int numThreads) {
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
-  printf("Average:- %f, Std:- %f, threads: %d \n", avg, std, numThreads);
+  // printf("RWLock Average:- %f, Std:- %f, threads: %d \n", avg, std,
+  // numThreads);
+  struct result *result = malloc(sizeof(struct result));
+  result->avg = avg;
+  result->std = std;
+  return result;
 }

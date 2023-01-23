@@ -10,6 +10,12 @@
         "mutex": "c",
         "shared_mutex": "c",
         "__mutex_base": "c",
-        "memory": "c"
+        "memory": "c",
+        "all_programs.h": "c",
+        "random": "c",
+        "graph.h": "c",
+        "python.h": "c",
+        "functional": "c",
+        "__locale": "c"
     }
 }

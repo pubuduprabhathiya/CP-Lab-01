@@ -1,9 +1,9 @@
+#include "all_programs.h"
 #include "operation.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "pthread_mutex_rwlock.h"
 
 pthread_mutex_t lock;
 
@@ -16,8 +16,8 @@ struct mutex_args {
 
 void *run_program(void *ptr) {
   struct mutex_args *args = (struct mutex_args *)ptr;
-
-  for (int i = args->thread_id; i < M; i = i + args->num_of_thread) {
+  int num=args->num_of_thread;
+  for (int i = args->thread_id; i < M; i = i + num) {
     pthread_mutex_lock(&lock);
     args->ops[i](get_random(), args->head);
     pthread_mutex_unlock(&lock);
@@ -26,18 +26,17 @@ void *run_program(void *ptr) {
   return EXIT_SUCCESS;
 }
 
-void run_mutex(int case_num,int numThreads) {
-
+struct result *run_mutex(int case_num, int numThreads) {
   clock_t time_list[trials];
 
   operation *ops = start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
-    pthread_t *threadHandles;
     struct node *head = get_linked_list();
+    pthread_t *threadHandles;
     pthread_mutex_init(&lock, NULL);
-
     threadHandles = malloc(numThreads * sizeof(pthread_t));
+      
 
     clock_t time = clock();
 
@@ -61,5 +60,10 @@ void run_mutex(int case_num,int numThreads) {
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
-  printf("Average:- %f, Std:- %f, threads: %d \n", avg, std, numThreads);
+  // printf("Mutex Average:- %f, Std:- %f, threads: %d \n", avg, std,
+  // numThreads);
+  struct result *result = malloc(sizeof(struct result));
+  result->avg = avg;
+  result->std = std;
+  return result;
 }

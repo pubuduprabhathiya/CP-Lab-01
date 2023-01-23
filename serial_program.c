@@ -1,13 +1,10 @@
+#include "all_programs.h"
 #include "operation.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-int main() {
-
-  int case_num = 1;
-  printf("Enter case nuber: ");
-  int err = scanf("%d", &case_num);
+struct result *run_serial(int case_num) {
 
   clock_t time_list[trials];
 
@@ -24,6 +21,10 @@ int main() {
   }
   double avg = get_avg(time_list);
   double std = get_std(time_list, avg);
-  printf("Average:- %f, Std:- %f \n", avg, std);
-  return 0;
+  // printf("Serial Average:- %f, Std:- %f \n", avg, std);
+
+  struct result *result = malloc(sizeof(struct result));
+  result->avg = avg;
+  result->std = std;
+  return result;
 }
