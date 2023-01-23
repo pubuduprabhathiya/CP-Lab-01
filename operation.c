@@ -16,7 +16,7 @@ operation *get_operation_list(float m_member, float m_insert, float m_delete) {
        i++) {
     ops[i] = &Delete;
   }
-  randomize(ops, N);
+  randomize(ops, M);
   return ops;
 }
 
@@ -49,11 +49,8 @@ double get_std(clock_t *time_list, double mean) {
   return sqrt(std / trials);
 }
 
-operation *start_program() {
-  int case_num = 1;
+operation *start_program( int case_num) {
   int m_member, m_insert, m_delete;
-  printf("Enter case nuber: ");
-  int err = scanf("%d", &case_num);
 
   if (case_num == 1)
     m_member = M * 0.99, m_insert = M * 0.005, m_delete = M * 0.005;

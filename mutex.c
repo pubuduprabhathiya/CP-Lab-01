@@ -28,10 +28,17 @@ void *run_program(void *ptr) {
 }
 
 int main() {
+
+  int case_num = 1;
+  printf("Enter case nuber: ");
+  int err = scanf("%d", &case_num);
+
   clock_t time_list[trials];
-  operation *ops =start_program();
+  
   printf("Enter number of treads: ");
-  int err = scanf("%d", &numThreads);
+  err = scanf("%d", &numThreads);
+
+  operation *ops =start_program(case_num);
 
   for (int t = 0; t < trials; t++) {
     pthread_t *threadHandles;
